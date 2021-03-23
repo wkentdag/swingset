@@ -4,6 +4,19 @@ An opinionated, drop-in component library for next.js apps.
 
 > **NOTE**: This project is in early alpha stages, and the readme is still not accurate. It is not recommended for use currently. If you really want to use it still, reach out to the author.
 
+wkd roadmap:
+
+* [x] add ability to pass `mdxOptions` to `swingset/getStaticProps`, enabling custom processing on docs e.g. adding inline links
+* [x] add ability to use multiple components into one "page". I guess you could do this by adding *all* components to scope already, but it'd be nice to do via frontmatter.
+* [ ] split the app into multiple pages. distinct routes per component.
+* [ ] custom function to grab props per component
+
+wkd notes:
+
+* `withSwingset` allows us to inject a custom webpack loader. 
+* the webpack loader intercepts file requests to `./__swingset_components` and returns a JSON blob of all of the components.
+* The JSON blob is what actually gets passed to the page as props 
+
 ### Installation
 
 Install via npm with `npm i swingset`, then add the plugin to your `next.config.js` as such:

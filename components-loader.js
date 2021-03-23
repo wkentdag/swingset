@@ -71,10 +71,11 @@ function formatComponentsWithNames(components, config) {
         )}" is missing metadata. Please add the component's name as you would like it to be imported as "componentName" to the front matter at the top of the file.`
       )
     }
-    return { name: data.componentName, path: componentDir }
+    return { name: data.componentName, path: componentDir, data }
   })
 }
 
+//  @TODO WKD -- where does this file get used elsewhere? probably will have to pass in the props rather than the path to the file
 // Write out the component metadata to a file, which is formatted as such:
 //
 // ```
@@ -103,12 +104,14 @@ function generateComponentsMetadataFile(components) {
     path: '${component.path}',
     docsPath: '${path.join(component.path, 'docs.mdx')}',
     propsPath: '${path.join(component.path, 'props.js')}',
-    src: ${component.name}
+    src: ${component.name},
+    data: ${JSON.stringify(component.data, null, 2)}
   },
 `
       return memo
     }, '') +
     '}\n'
 
+  console.log(contents)
   return imports + '\n' + contents
 }
