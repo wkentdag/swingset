@@ -103,6 +103,7 @@ export default function createStaticProps(swingsetOptions = {}) {
       activeComponentName,
       componentNames: components.map(({ componentName }) => componentName),
       ...pageProps,
+      mdx,
     }
   }
 }
