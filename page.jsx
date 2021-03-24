@@ -1,28 +1,31 @@
 import s from './style.module.css'
 import { useState, useEffect, useRef } from 'react'
 import Head from 'next/head'
+import Link from 'next/link'
 import hydrate from 'next-mdx-remote/hydrate'
 import createScope from './utils/create-scope'
 import { useRestoreUrlState, setUrlState } from './utils/url-state'
 import components from './__swingset_components'
 
 export default function createPage(swingsetOptions = {}) {
-  return function Page({ mdxSources, componentNames }) {
+  return function Page({ mdxSources, componentNames, activeComponentName }) {
+    console.log(`${activeComponentName} page`)
+
     // tracks the name of the current component
-    const [name, setName] = useState(componentNames[0])
+    const [name, setName] = useState(activeComponentName)
     const [filterValue, setFilterValue] = useState()
     const [componentNotFound, setComponentNotFound] = useState(false)
 
     const searchInputRef = useRef()
 
     // if there's a component specified in the querystring, set that to current
-    useRestoreUrlState(({ component }) => {
-      if (component && components[component]) {
-        setName(component)
-      } else {
-        setComponentNotFound(component)
-      }
-    })
+    // useRestoreUrlState(({ component }) => {
+    //   if (component && components[component]) {
+    //     setName(component)
+    //   } else {
+    //     setComponentNotFound(component)
+    //   }
+    // })
 
     // Focus the search input when pressing the '/' key
     useEffect(() => {
@@ -56,6 +59,10 @@ export default function createPage(swingsetOptions = {}) {
     const component = components[name]
     const Component = component.src
 
+    if (!component) {
+      setComponentNotFound(true)
+    }
+
     let peerComponents = {}
     if (component.data.peerComponents) {
       component.data.peerComponents.forEach((name) => {
@@ -71,7 +78,6 @@ export default function createPage(swingsetOptions = {}) {
         }
       })
     }
-
 
     // fully hydrated mdx document, with the components in the created scope available for use
     const mdx = hydrate(mdxSources[name], {
@@ -110,16 +116,13 @@ export default function createPage(swingsetOptions = {}) {
                 className={componentName === name ? s.active : ''}
                 key={componentName}
               >
-                <a
-                  href={`?component=${componentName}`}
-                  onClick={(e) => {
-                    setName(componentName)
-                    setUrlState(componentName)
-                    e.preventDefault()
-                  }}
+                <Link
+                  as={`/components/${componentName}`}
+                  href="/components/[component]"
                 >
-                  {componentName}
-                </a>
+                  <a>
+                  {componentName}</a>
+                </Link>
               </li>
             )
           })}

@@ -9,7 +9,8 @@ import components from './__swingset_components'
 
 // TODO: this whole thing honestly needs a refactor
 export default function createStaticProps(swingsetOptions = {}) {
-  return async function getStaticProps() {
+  return async function getStaticProps({ params }) {
+    const activeComponentName = params.component
     // Go through each component, read and format the docs and props files' content
     const docsSrcs = Object.keys(components).map((name) => {
       const component = components[name]
@@ -90,6 +91,7 @@ export default function createStaticProps(swingsetOptions = {}) {
       props: {
         mdxSources,
         componentNames: docsSrcs.map((d) => d.frontMatter.componentName),
+        activeComponentName,
       },
     }
   }
