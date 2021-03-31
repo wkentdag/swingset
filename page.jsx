@@ -8,7 +8,7 @@ import { useRestoreUrlState, setUrlState } from './utils/url-state'
 import components from './__swingset_components'
 
 export default function createPage(swingsetOptions = {}) {
-  return function Page({ mdxSources, componentNames, activeComponentName }) {
+  return function Page({ componentNames, activeComponentName, mdx }) {
     console.log(`${activeComponentName} page`)
 
     // tracks the name of the current component
@@ -80,7 +80,7 @@ export default function createPage(swingsetOptions = {}) {
     }
 
     // fully hydrated mdx document, with the components in the created scope available for use
-    const mdx = hydrate(mdxSources[name], {
+    const hydratedMdx = hydrate(mdx, {
       components: createScope({ [name]: Component }, swingsetOptions, peerComponents),
     })
 
@@ -133,7 +133,7 @@ export default function createPage(swingsetOptions = {}) {
               ⚠️ Component "{componentNotFound}" was not found
             </p>
           )}
-          {mdx}
+          {hydratedMdx}
         </div>
       </div>
     )
