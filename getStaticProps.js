@@ -9,23 +9,12 @@ import components from './__swingset_components'
 
 export function createStaticPaths(swingsetOptions = {}) {
   return async function getStaticPaths() {
-    // const componentPaths = components.map(({ componentName }) => ({
-    //   params: {
-    //     component: componentName,
-    //   }
-    // }))
+    const componentPaths = Object.keys(components).map((component) => ({
+      params: {
+        component,
+      }
+    }))
 
-    const componentPaths = [
-      {
-        params: { component: 'Accordion' },
-      },
-      {
-        params: { component: 'GridList' },
-      },
-    ]
-
-    console.log('componentPaths:')
-    console.log(componentPaths)
     return {
       paths: componentPaths,
       fallback: false,
@@ -100,10 +89,12 @@ export default function createStaticProps(swingsetOptions = {}) {
     })
 
     return {
-      activeComponentName,
-      componentNames: components.map(({ componentName }) => componentName),
-      ...pageProps,
-      mdx,
+      props: {
+        activeComponentName,
+        componentNames: Object.keys(components),
+        ...pageProps,
+        mdx,
+      },
     }
   }
 }
